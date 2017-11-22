@@ -11,16 +11,23 @@
       $data = $result->fetch_assoc();
       $email = $data['email'];
       $_POST['email']=$email;
-      $sql_update = "UPDATE users SET hash='' WHERE email='".$email."'";
-      $con->query($sql_update);
       $can_reset=1;
-      $flagForm = 1;
-      $success= "Set your new password";
+      
+      $validtime = $data['validtime'];
+      $now = date('dHi');
+      if($now - $validtime < 100){
+        $flagForm = 1;
+        $success= "Silakan masukkan password baru yang Anda inginkan";
+      }
+      else{
+        $flagForm = 0;
+        $err= "Silakan ulangi lagi reset password, karena link sudah kadaluarsa";  
+      }      
     }
     else
     {
       $flagForm = 0;
-      $err= "Email Verification Failed";
+      $err= "Link yang anda klik salah, silakan untuk mengulangi proses reset password";
     }
   }
 
@@ -43,7 +50,9 @@
         $seconds = $milliseconds / 1000;
         $remainder = round($seconds - ($seconds >> 0), 3) * 1000;
         $hash =  md5(date("ymdHis").$remainder);
-        $sql_update = "UPDATE users SET hash='".$hash."' WHERE email='".$email."'";
+        $validtime = date('dHi');
+        $sql_update = "UPDATE users SET validtime = '".$validtime."', hash='".$hash."' WHERE email='".$email."'";
+        echo $sql_update;
         $con->query($sql_update);
 
         $to = $email;
@@ -72,7 +81,7 @@
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    $sql = "UPDATE users SET password = '".md5($password)."' WHERE email='".$email."'";
+    $sql = "UPDATE users SET hash = '', password = '".md5($password)."' WHERE email='".$email."'";
 
     if(empty($password) || empty($confirm_password)) {
       $flagForm = 0;
@@ -146,24 +155,45 @@
 
   </style>
 </head>
-<body style="z-index: -1;">  
-  <div class="container" style="margin-top: 53px;">
-    <h3>Reset Password</h3>  
+<body style="z-index: -1;">   
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:70px;min-height: 480px;">    
+      <?php
+        if(isset($flagForm) && $flagForm == 1){          
+          echo "<div class='col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10'>";
+          echo "<div class='container col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-success fade in' style='margin-right:10px;'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong> $success </strong></div>";
+          echo "</div>";
+          echo "<div class='clearfix visible-xs-block'></div>";
+          echo "<div class='clearfix visible-sm-block'></div>";
+          echo "<div class='clearfix visible-md-block'></div>";
+          echo "<div class='clearfix visible-lg-block'></div>";
+        }
+        else if(isset($flagForm) && $flagForm == 0){
+          echo "<div class='col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10'>";
+          echo "<div class='container col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-danger fade in' style='margin-right:10px;'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong> Error!</strong> $err </div>";
+          echo "</div>";
+          echo "<div class='clearfix visible-xs-block'></div>";
+          echo "<div class='clearfix visible-sm-block'></div>";
+          echo "<div class='clearfix visible-md-block'></div>";
+          echo "<div class='clearfix visible-lg-block'></div>";
+        }
+      ?> 
+    <div class="container">    
+      <div class="container" id="grad4">                  
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <h4 style="color:white;margin-top: 15px;text-align: left;">Reset Password</h4>  
+        </div>          
+      </div>
     <?php
-      if(isset($flagForm) && $flagForm == 1){
-        echo "<div class='col-lg-12 col-xs-12 col-md-12 col-sm-12 alert alert-success fade in'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong> $success </strong></div>";
-      }
-      else if(isset($flagForm) && $flagForm == 0){
-        echo "<div class='col-lg-12 col-xs-12 col-md-12 col-sm-12 alert alert-danger fade in'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong> Error!</strong> $err </div>";
-      }
-      if(isset($can_reset) && $can_reset == 1)
+      if(isset($can_reset) && $can_reset == 1 && $now - $validtime < 100)
       {
-        ?>
+        ?>        
+        <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+        <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='border: 1px solid gainsboro;padding: 5px;margin-right: 25px;'>
         <form name="form_resetpassword" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
-        <div class='col-xs-12 col-sm-9 col-md-9 col-lg-12'>
+        <div class='col-xs-12 col-sm-9 col-md-9 col-lg-offset-3 col-lg-6'>
           <div class='form-group'>   
             <label class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Nama'>New Password</label>
-            <div class='col-xs-12 col-sm-9 col-md-9 col-lg-3'>
+            <div class='col-xs-12 col-sm-9 col-md-9 col-lg-9'>
               <input type='password' class='form-control' id='password' name='password' value='' autofocus>
             </div>
             <div class='clearfix visible-xs-block'></div>
@@ -173,7 +203,7 @@
           </div>
           <div class='form-group'>   
             <label class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Nama'>Confirm New Password</label>
-            <div class='col-xs-12 col-sm-9 col-md-9 col-lg-3'>
+            <div class='col-xs-12 col-sm-9 col-md-9 col-lg-9'>
               <input type='password' class='form-control' id='confirm_password' name='confirm_password' value='' autofocus>
             </div>
             <div class='clearfix visible-xs-block'></div>
@@ -191,22 +221,37 @@
           </div>
         </form>
         </div>
+        </div>
+        </div>
       <?php
       }
       else{
       ?>  
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-3 col-lg-6"> 
-      <form id="resetpass-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="">
-        <div class="form-group">
-          <h4 class="col-xs-12 col-sm-12 col-md-12 col-lg-4">Email</h4>
-          <input class="col-xs-12 col-sm-12 col-md-12 col-lg-6" type="email" name="email" id="email" tabindex="1" class="form-control" style="margin-top:5px;" placeholder="Email Address" value="">
-          <button type="submit" class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-7 col-lg-3 btn btn-success" style="margin-top:5px;" name="btn_reset">Reset <span class="glyphicon glyphicon-send"></span></button>
+    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+      <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='border: 1px solid gainsboro;padding: 5px;margin-right: 25px;'>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-3 col-lg-6"> 
+        <form id="resetpass-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="">
+          <div class="form-group">
+            <h4 class="col-xs-12 col-sm-12 col-md-12 col-lg-4">Email</h4>
+            <input class="col-xs-12 col-sm-12 col-md-12 col-lg-6" type="email" name="email" id="email" tabindex="1" class="form-control" style="margin-top:5px;" placeholder="Email Address" value="">
+            <button type="submit" class="col-xs-12 col-sm-12 col-md-12 col-lg-offset-7 col-lg-3 btn btn-success" style="margin-top:5px;" name="btn_reset">Reset <span class="glyphicon glyphicon-send"></span></button>
+          </div>
+        </form>
         </div>
-      </form>
+      </div>  
   	</div>
     <?php
     }
     ?>
+    <div class='clearfix visible-xs-block'></div>
+    <div class='clearfix visible-sm-block'></div>
+    <div class='clearfix visible-md-block'></div>
+    <div class='clearfix visible-lg-block'></div>     
+    <div class="container" id="grad4" style="height: 30px;">        
+      <h4 style="color:white;margin-top: 15px;text-align: center;"><?php echo " "; ?></h4>            
+    </div>
+    </div>
+  </form>
   </div>
   <?php include 'footer.php'; ?>    
 </body>

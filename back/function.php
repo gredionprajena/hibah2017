@@ -77,14 +77,15 @@
 		else if($from == 1){$sender = 'admin@munafood.com';}
 		$password = "mun4f00d";
 
-		// if($env->system_env() == "Production")
-		// {
-		// 	ini_set( 'display_errors', 1 );
-		//     $headers = "From:" . $sender;	 
-		// 	$status = mail($to, $subject, $message, $headers);
-		// }
-		// else if($env->system_env() == "Development")
-		// {
+		if($env->system_env() == "Production")
+		{
+			ini_set( 'display_errors', 1 );
+		    $headers = "From:" . $sender;	 
+			$status = mail($to, $subject, $message, $headers);
+		 
+		}
+		else if($env->system_env() == "Development")
+		{
 			require("lib/PHPMailer/PHPMailerAutoload.php");
 			require("lib/PHPMailer/class.phpmailer.php");
 			require("lib/PHPMailer/class.smtp.php");
@@ -96,7 +97,7 @@
 			$mail->Body =  $message;
 			 
 			$status = $mail->send();
-		// }
+		}
 		if($status){ return "Email berhasil dikirim";  } 
 			else { return "Terdapat kesalahan dalam sistem";}
 	}
