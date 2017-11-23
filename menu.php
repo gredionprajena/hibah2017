@@ -10,8 +10,16 @@
   $sql = "SELECT * FROM ukm where id = '1'";  
   $result = $con->query($sql);
 
-  if(isset($_SESSION['jml'])) $jml = $_SESSION['jml'];
-  else {$jml = 0;}
+
+  $jml=0;
+  if(isset($_SESSION['cart']))
+  {
+    $cart = $_SESSION['cart'];
+    foreach ($cart as $key => $value) {
+      $jml+=$value;
+    }
+    $_SESSION['jml'] = $jml;
+  }
 
   if($result->num_rows > 0 ){
     $row = $result->fetch_assoc();

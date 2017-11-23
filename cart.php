@@ -1,6 +1,37 @@
 <?php include 'menu.php'; ?>
-<?php
-  if(isset($_SESSION['cart'])) {
+<?php 
+  if(isset($_POST['id_produk']) && isset($_POST['btn_delete']))
+  {
+    $id = $_POST['id_produk'];
+    $cart = $_SESSION['cart'];
+    $jml=0;
+    foreach ($cart as $key => $value) {
+      $jml += $value;
+    }
+    $_SESSION['jml'] = $jml;
+    unset($_SESSION['cart'][$id]);
+    header("Location: cart.php");
+  }
+
+  if(isset($_POST['id_produk']) && isset($_POST['qty']) && isset($_POST['btn_update']))
+  {
+    $id = $_POST['id_produk'];
+    $qty = $_POST['qty'];
+    $_SESSION['cart'][$id] = $qty;
+    $cart = $_SESSION['cart'];
+    $jml=0;
+    foreach ($cart as $key => $value) {
+      $jml += $value;
+    }
+    $_SESSION['jml'] = $jml;
+    header("Location: cart.php");
+  }
+  
+
+  //echo "<br><br><pre>";print_r($cart);echo "</pre>";
+
+  if(isset($_SESSION['cart']))
+  { 
     $cart = $_SESSION['cart'];
     foreach ($cart as $key => $value) {
       $sql = "SELECT * FROM produk where id=".$key;
@@ -18,7 +49,7 @@
       $cart2[$id] = $temp;
     }
     //echo "<pre>";print_r($cart2);echo "</pre>";
-  }
+  } 
   
 ?>
 <html>
@@ -119,6 +150,7 @@
               $grandtotal = 0;                
               foreach ($cart2 as $key => $value) {
             ?>
+              <form method="POST" action="cart.php">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 divhover" style="padding: 10px;"> 
                   <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
                     <div class="hidden-xs hidden-sm col-md-5 col-lg-4">
@@ -135,8 +167,13 @@
                     </div>      
                   </div>
                   <div class="hidden-xs col-sm-2 col-md-1 col-lg-1" style="text-align: center">
-                    <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo isset($value) ? $value['qty'] : "" ?>">
+                    <input type="hidden" name="id_produk" value="<?php echo isset($value) ? $value['id'] : "" ?>">
+                    <input type="text" class="form-control" id="qty" name="qty" value="<?php echo isset($value) ? $value['qty'] : "" ?>">
+                    <button type="submit" name="btn_update" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></button>
                   </div>
+
+                </form>
+                <form method="POST" action="cart.php">
                   <div class="hidden-xs col-sm-2 col-md-2 col-lg-2">
                     <p style="margin-top: 7px;text-align: right"><strong><?php echo isset($value) ? "Rp " . number_format($value['price'],0,',','.') : "" ?></strong></p>
                   </div>
@@ -170,7 +207,7 @@
                   </div>          
                   <div class="clearfix visible-sm-block"></div>
                   <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">                
-                    <button type="button" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-trash"></span></button><br/><br/>
+                    <button type="submit" name="btn_delete" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-trash"></span></button><br/><br/>
                   </div>  
                   <div class="clearfix visible-xs-block"></div>
                   <div class="clearfix visible-sm-block"></div>
@@ -178,45 +215,12 @@
                   <div class="clearfix visible-lg-block"></div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><p style="border-bottom: 1px solid grey;"></p></div>
+                <input type="hidden" name="id_produk" value="<?php echo isset($value) ? $value['id'] : "" ?>">
+                </form>
             <?php
                 $grandtotal += isset($value) ? $value['total'] : 0;
               }
             ?>
-                     <!--  <tr>
-                          <td class="col-md-6">
-                          <div class="media">
-                              <a class="thumbnail pull-left" href="#"> <img class="media-object" src="image/product2.jpeg" style="width: 72px; height: 72px;"> </a>
-                              <div class="media-body">
-                                  <p class="media-heading"><a href="#">Product name</a></p>
-                                  <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                                  <span>Status: </span><span class="text-warning"><strong>Leaves warehouse in 2 - 3 weeks</strong></span>
-                              </div>
-                          </div></td>
-                          <td class="col-md-1" style="text-align: center">
-                          <input type="email" class="form-control" id="exampleInputEmail1" value="2">
-                          </td>
-                          <td class="col-md-1 text-center"><strong>$4.99</strong></td>
-                          <td class="col-md-1 text-center"><strong>$9.98</strong></td>
-                          <td class="col-md-1">
-                          <button type="button" class="btn btn-danger">
-                              <span class="glyphicon glyphicon-remove"></span> Remove
-                          </button></td>
-                      </tr> -->
-                    <!--   <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td><h5>Subtotal</h5></td>
-                          <td class="text-right"><h5><strong><?php echo $subtotal; ?></strong></h5></td>
-                      </tr> -->
-                     <!--  <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td><h5>Ongkos Kirim</h5></td>
-                          <td class="text-right"><h5><strong>9000</strong></h5></td>
-                      </tr> -->
-              
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: white;">           
             <div class="col-xs-6 col-sm-8 col-md-10 col-lg-10" style="margin-top: 10px;">                   
               <p style="text-align: right">Total Belanja :</p>
