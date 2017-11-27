@@ -234,7 +234,7 @@ date_default_timezone_set ("Asia/Jakarta");
             $resultBank = $con->query($sqlBank);
 
             while($rowBank = $resultBank->fetch_assoc()) {
-              echo "<h5><b>".$rowBank["nama_bank"] . " " . $rowBank["no_rek"] . " atas nama " . $rowBank["pemilik_rek"] "</b><br></h5>";
+              echo "<h5><b>".$rowBank["nama_bank"] . " " . $rowBank["no_rek"] . " atas nama " . $rowBank["pemilik_rek"] ."</b><br></h5>";
             }
           ?>
           <h5>Sebesar Rp. <?php echo number_format($row_head['total_bayar'],0,',','.'); ?></h5>

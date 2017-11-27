@@ -52,7 +52,7 @@
         $hash =  md5(date("ymdHis").$remainder);
         $validtime = date('dHi');
         $sql_update = "UPDATE users SET validtime = '".$validtime."', hash='".$hash."' WHERE email='".$email."'";
-        echo $sql_update;
+        // echo $sql_update;
         $con->query($sql_update);
 
         $to = $email;
@@ -95,7 +95,7 @@
     }
     else if ($con->query($sql) === TRUE) {
       $flagForm = 1;
-      $success = "Change password success, please do Login";
+      $success = 'Change password success, click <a href="login.php">Here</a> to login';
     }
     else {
       $flagForm = 0;
