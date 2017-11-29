@@ -97,7 +97,7 @@
 		$header .= "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>";
 		//http://munafood.com/image/01/logo/logo01.jpg
 
-		$atas .= "<p style='font-size: 20px;'><br/>". $name . " <br/></p>";	
+		$atas = "<p style='font-size: 20px;'><br/>". $name . " <br/></p>";	
 	    $atas .= "<p><hr/></p>";
 		$atas .= "<br/><br/>";
 
@@ -135,9 +135,9 @@
 		// }
 		// else if($env->system_env() == "Development")
 		// {
-			require("../lib/PHPMailer/PHPMailerAutoload.php");
-			require("../lib/PHPMailer/class.phpmailer.php");
-			require("../lib/PHPMailer/class.smtp.php");
+			require("lib/PHPMailer/PHPMailerAutoload.php");
+			require("lib/PHPMailer/class.phpmailer.php");
+			require("lib/PHPMailer/class.smtp.php");
 			$mail = new PHPMailer;
 			$mail->SMTPDebug = 3; 
 			$mail->SMTPDebug = 1; 
