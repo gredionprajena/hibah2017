@@ -91,7 +91,7 @@
         $editNoRek = addslashes($_POST["editNoRek"]); 
       }
       if($flagForm == 1 && (isset($_POST["addBank"]) && $_POST["addBank"] != "")){ 
-        $sql2 = "insert into bank(urutan, nama_bank, no_rek, pemilik_rek) values ('$urutan', '$editNamaBank', '$editPemilik', '$editNoRek')";
+        $sql2 = "insert into bank(urutan, nama_bank, no_rek, pemilik_rek) values ('$urutan', '$editNamaBank', '$editNoRek', '$editPemilik')";
         $result2 = $con->query($sql2);
         // echo "$sql2";
         $tambahRekening = $_POST["tambahRekening"] = "cancel";
@@ -465,14 +465,6 @@
                 echo "<div class='clearfix visible-xs-block'></div>";                 
                 echo "</div>";        
                 echo "<div class='form-group'>";        
-                echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='an'>Atas Nama : </label>";
-                echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                echo "<input type='text' class='form-control' id='editPemilik' name='editPemilik' value='$editPemilik' placeholder='add Atas Nama...'>";     
-                echo "<span class='text-danger'>$editPemilikErr</span>";
-                echo "</div>";
-                echo "<div class='clearfix visible-xs-block'></div>";                 
-                echo "</div>";     
-                echo "<div class='form-group'>";        
                 echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='norek'>Nomor Rekening : </label>";
                 echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
                 echo "<input type='text' class='form-control' id='editNoRek' name='editNoRek' value='$editNoRek' placeholder='add No Rekening...'>";   
@@ -480,6 +472,14 @@
                 echo "</div>";
                 echo "<div class='clearfix visible-xs-block'></div>";                 
                 echo "</div>";     
+                echo "<div class='form-group'>";        
+                echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='an'>Atas Nama : </label>";
+                echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
+                echo "<input type='text' class='form-control' id='editPemilik' name='editPemilik' value='$editPemilik' placeholder='add Atas Nama...'>";     
+                echo "<span class='text-danger'>$editPemilikErr</span>";
+                echo "</div>";
+                echo "<div class='clearfix visible-xs-block'></div>";                 
+                echo "</div>";                     
               echo "<div class='panel-footer clearfix'>";
                   echo "<div class='pull-right'>";                    
                     echo "<button type='submit' class='btn btn-default' name='cancelBank' value='cancelRek'>Cancel</button>&emsp;";
