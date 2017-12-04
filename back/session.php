@@ -4,10 +4,10 @@
       	//session_name("munafood");
 	    session_start();
 	}
-	else{
-		session_destroy();
-		session_unset();
-	}
+	// else{
+	// 	session_destroy();
+	// 	session_unset();
+	// }
 	 	
 	//Expire the session if user is inactive for 30
 	//minutes or more.

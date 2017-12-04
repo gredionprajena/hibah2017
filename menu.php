@@ -1,7 +1,8 @@
 <?php
-  session_start();
+  // session_start();
   include 'connect.php';
   include 'back/function.php';
+  include 'session.php';
 
   date_default_timezone_set ("Asia/Jakarta");
   $db = new DB_Connect();
@@ -67,7 +68,7 @@
           echo "<li><a class='linkmenu' href='product.php'>Produk</a></li>";           
           echo "<li><a class='linkmenu' href='profile.php'>Profil</a></li>";            
           if(isset($_SESSION['email'])){
-  include 'session.php';  
+  // include 'session.php';  
         ?>
             <li><a class='linkmenu hidden-sm' href='pesanan.php'>History Pesanan</a></li>
             <li class="dropdown">
@@ -98,7 +99,7 @@
               <li class="dropdown">
                 <a class="linkmenu hidden-xs" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <?php echo $_SESSION["name"]; ?> <span class="caret"></span></a>
                 <ul role="menu" class="dropdown-menu">              
-                  <li><a class="linksubmenu hidden-xs" href="changePassword.php">Ganti Password</a></li>                  
+                  <li><a class="linksubmenu hidden-xs" href="changepassword.php">Ganti Password</a></li>                  
                   <li class="divider hidden-xs"></li>
                   <li><a class="linksubmenu hidden-xs" href="logout.php">Logout</a></li>
                 </ul>

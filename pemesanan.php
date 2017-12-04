@@ -90,9 +90,9 @@
       }
 
       if(isset($_SESSION['cart']))
-        session_unset($_SESSION['cart']);
+        unset($_SESSION['cart']);
       if(isset($_SESSION['jml']))
-        session_unset($_SESSION['jml']);
+        unset($_SESSION['jml']);
       $_SESSION['kode_pesan'] = $kode_pesan;
       $con->close();
 
@@ -104,8 +104,8 @@
                   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
                   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script></head><h4>Hai '.$nama_penerima.',<br>Segera lakukan pembayaran untuk transaksi '.$kode_pesan.' sebesar Rp. '.$total_bayar.' ke rekening munafood.<br>Lakukan konfirmasi pembayaran jika sudah melakukan pembayaran. <a href="http://munafood.com/confirm.php">Konfirmasi</a>  </h4>';
       $from = 0;
-      send_email($to, $subject, $message, $from);
-      header('location: thankyou.php');
+      //send_email($to, $subject, $message, $from);
+      header('location: emailpemesanan.php?kode='.$kode_pesan);
     }
   }
   

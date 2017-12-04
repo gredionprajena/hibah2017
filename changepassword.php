@@ -1,99 +1,39 @@
 <html>
 <?php include 'menu.php';
 
-  if(isset($_GET['hash']))
-  {
-    $hash = $_GET['hash'];
-    $sql_hash = "SELECT * FROM users WHERE hash='".$hash."'";
-    $result = $con->query($sql_hash);
-    if($result->num_rows > 0)
-    {
-      $sql_update = "UPDATE users SET role=1, hash='' WHERE hash='".$hash."'";
-      $con->query($sql_update);
-      $verif = "Email verification succeed, please do Login below.";
-    }
-  }
+  if(isset($_POST['change_submit'])){
+    $email = $_SESSION['email'];
+    $oldpassword = $_POST['oldpassword'];
+    $newpassword = $_POST['newpassword'];
+    $confirmnewpassword = $_POST['confirmnewpassword'];
 
-  if(isset($_POST['login_submit'])){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    // $message = "email: ".$email."password: ".$password;
-    // echo $message;
-    $sql = "SELECT * FROM users WHERE email = '".$email."' AND password = '".md5($password)."'";
-    $sql_active = "SELECT * FROM users WHERE email = '".$email."' AND password = '".md5($password)."' AND (role=1 OR role=2)";
-
-    if(empty($email) || empty($password)) {
-      $flagForm = 0;
-      $err = "All field should be filled";
-    }
-    else {
-      $result = $con->query($sql);
-      if($result->num_rows >= 1) {
-        $result_active = $con->query($sql_active);
-        if($result_active->num_rows > 0)
-        {
-          $temp = $result->fetch_assoc();
-          $_SESSION['email']=$temp['email'];
-          $_SESSION['user_id']=$temp['id'];
-          $_SESSION['name']=$temp['name'];
-          $_SESSION['role']=$temp['role'];
-          if($temp['role'] == 1) header("location: index.php");
-          else if($temp['role'] == 2) header("location: back/index.php");
-        }
-        else
-        {
-          $flagForm = 0;
-          $err = "Email not verified yet, please check your email to verify";
-        }
-      }
-      else {
-        $flagForm = 0;
-        $err = "Email or Password invalid";
-      }
-    }
-
-  }
-  else if(isset($_POST['register_submit'])){
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-    //$message = "email: ".$email."address: ".$address."password: ".$password."confirmpassword: ".$confirm_password;
-    //echo $message;
 
     $milliseconds = microtime(true);
     $seconds = $milliseconds / 1000;
     $remainder = round($seconds - ($seconds >> 0), 3) * 1000;
     $hash =  md5(date("ymdHis").$remainder);
-    $sql_check = "SELECT * FROM users WHERE email='".$email."'";
-    $result_check = $con->query($sql_check);
-
-    $sql = "INSERT INTO users (email, name, password, hash) VALUES ('".$email."', '".$name."', '".md5($password)."', '".$hash."')";
-
-    if(empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
+  
+    $sql = "UPDATE users SET password = '".md5($newpassword)."' WHERE email = '".$email."'";
+    if(empty($oldpassword) || empty($newpassword) || empty($confirmnewpassword)) {
       $flagForm = 0;
       $err = "All field should be filled";
     }
-    else if($password != $confirm_password) {
+    else if($newpassword != $confirmnewpassword) {
       $flagForm = 0;
-      $err = "Password should be same with confirm password";
-    }
-    else if($result_check->num_rows > 0) {
-      $flagForm = 0;
-      $err = "Email already exist";
+      $err = "New password should be same with confirm new password";
     }
     else if ($con->query($sql) === TRUE) {
       $flagForm = 1;
-      $success = "Register success, check your email";
+      $success = "Password changed";
 
       $to = $email;
-      $subject = "Verifikasi Email";
+      $subject = "[munafood.com] Password anda telah berubah";
       $message = '<head>
                   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
                   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script></head><h4>Hai '.$name.',<br>
-                  Anda telah teregistrasi pada munafood.com. <br>Untuk memverifikasi email ini klik link berikut <a href="http://munafood.com/login.php?hash='.$hash.'">Verifikasi Email</a>.</h4>';
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script></head><h4>Hai '.$_SESSION['name'].',<br>
+                  Kami ingin memberitahu bahwa password anda telah berubah.</h4>';
       $from = 0;
       send_email($to, $subject, $message, $from);
     }
@@ -114,7 +54,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <meta itemprop="name" content=""> 
-  <title>Login</title>
+  <title>Change Password</title>
   <link rel="shortcut icon" type="image/png" href="image/logo/logo01.jpg" />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -263,11 +203,8 @@
         <div class="panel panel-login">
           <div class="panel-heading">
             <div class="row">
-              <div class="col-xs-6">
-                <a href="#" class="active" id="login-form-link">Login</a>
-              </div>
-              <div class="col-xs-6">
-                <a href="#" id="register-form-link">Daftar</a>
+              <div class="col-xs-12">
+                <a href="#" class="active" id="login-form-link">Change Password</a>
               </div>
             </div>
             <hr>
@@ -282,54 +219,20 @@
                   echo "<div class='col-lg-12 col-xs-12 col-md-12 col-sm-12 alert alert-danger fade in'><a href='#' class='close' data-dismiss='alert'>&times;</a><strong> Error!</strong> $err </div>";
                 }             
               ?>
-              <form id="login-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" role="form" style="display: block;">
+              <form id="changepassword-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" role="form" style="display: block;">
                 <div class="form-group">
-                  <input type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="">
+                  <input type="password" name="oldpassword" id="oldpassword" tabindex="1" class="form-control" placeholder="Old Password">
                 </div>
                 <div class="form-group">
-                  <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-                </div>
-                <!-- <div class="form-group text-center">
-                  <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                  <label for="remember"> Ingat Saya</label>
-                </div> -->
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                      <input type="submit" name="login_submit" id="login_submit" tabindex="4" class="form-control btn btn-login" value="Masuk">
-                    </div>
-                  </div>
+                  <input type="password" name="newpassword" id="newpassword" tabindex="2" class="form-control" placeholder="New Password">
                 </div>
                 <div class="form-group">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="text-center">
-                        <a href="resetpassword.php" tabindex="5" class="forgot-password">Lupa Password?</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-              <form id="register-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" role="form" style="display: none;">
-                <div class="form-group">
-                  <input type="text" name="name" id="name" tabindex="1" class="form-control" placeholder="Full Name" value="">
-                </div>
-                <div class="form-group">
-                  <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
-                </div>
-                <!-- <div class="form-group">
-                  <textarea name="address" id="address" tabindex="2" class="form-control" placeholder="Address" rows="3"></textarea>
-                </div> -->
-                <div class="form-group">
-                  <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <input type="password" name="confirm_password" id="confirm_password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                  <input type="password" name="confirmnewpassword" id="confirmnewpassword" tabindex="3" class="form-control" placeholder="Confirm New Password">
                 </div>
                 <div class="form-group">
                   <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
-                      <input type="submit" name="register_submit" id="register_submit" tabindex="4" class="form-control btn btn-register" value="Daftar Sekarang">
+                      <input type="submit" name="change_submit" id="change_submit" tabindex="4" class="form-control btn btn-login" value="Change Password">
                     </div>
                   </div>
                 </div>

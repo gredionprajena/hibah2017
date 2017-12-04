@@ -1,16 +1,18 @@
 <html>
 <?php
-session_start();
+// session_start();
+include 'session.php';
 include 'connect.php';
 
   $db = new DB_Connect();
   $con = $db->connect();
-	if(!isset($_GET['kode']))
+	if(isset($_GET['kode']))
 	{ 
+		$kode = $_GET['kode'];
 	    $sql = "SELECT * FROM pemesanan p 
 	    JOIN pemesanan_detail pd ON p.kode_pemesanan = pd.kode_pemesanan 
 	    JOIN produk pr ON pd.id_barang = pr.id
-	    WHERE p.kode_pemesanan='171129173411652'";
+	    WHERE p.kode_pemesanan='".$kode."'";
 
 		$result = $con->query($sql);
 		for($i=0; $i < $result->num_rows; $i++)
@@ -36,9 +38,6 @@ include 'connect.php';
     $visi = $row['visi'];
   }
 
-// echo "<pre>";
-// print_r($_SESSION);
-// echo "</pre>";
 ob_start();
 ?>
 <head>
@@ -51,7 +50,7 @@ td {
     padding: 2px;
 }
 </style>
-<title>email</title>
+<title>Email</title>
 </head>
 <body>
 <div class="container" style="text-align:center;">
@@ -60,12 +59,24 @@ td {
     {
     	echo 'Terima kasih telah melakukan pemesanan<br>';
     	echo 'Hai '.$data[0]['nama_penerima'].', Anda telah melakukan pemesanan dengan kode transaksi<br>';
-    	echo '<h4>'.$data[0]['kode_pemesanan'].'</h4><br>';
-    	echo 'Total transaksi <h4>Rp. '. number_format($data[0]['total_bayar'],0,',','.').'</h4><br>';
+    	echo '<h4>'.$data[0]['kode_pemesanan'].'</h4>';
+    	echo 'Total transaksi <h4>Rp. '. number_format($data[0]['total_bayar'],0,',','.').'</h4>';
     	echo 'Mohon segera lakukan pembayaran  ke rekening munafood.<br>';
-    	echo 'Lakukan konfirmasi pembayaran jika sudah melakukan pembayaran.';
-    	echo '<a href="munafood.com/confirm.php">Konfirmasi</a><br><hr>';
+    ?>
+     	Pembayaran dapat ditransfer ke rekening <br>
+		<?php 
+		$sqlBank = "SELECT * FROM bank order by urutan";
+		$resultBank = $con->query($sqlBank);
 
+		while($rowBank = $resultBank->fetch_assoc()) {
+			echo "<h4><b>".$rowBank["nama_bank"] . " " . $rowBank["no_rek"] . " atas nama " . $rowBank["pemilik_rek"] ."</b><br></h4>";
+		}
+
+		echo 'Lakukan konfirmasi pembayaran jika sudah melakukan pembayaran.';
+		echo '<a href="munafood.com/confirm.php"> Konfirmasi</a><br>';
+		?>
+		<hr>
+    <?php
     $grandtotal = 0;
     $total_berat  = 0.0;
 
@@ -75,44 +86,35 @@ td {
     {
     ?>
 		<tr>
-			<td style="width:5%;"></td>
 			<td style="width:3%;"><a href="munafood.com/detailproduct.php?id=<?php echo $value['id']; ?>"><img style="width: 100%;" src="http://munafood.com/<?php echo $value['image'] ?>"></a></td>
 			<td style="width:5%;"><a href="munafood.com/detailproduct.php?id=<?php echo $value['id']; ?>"><h4><?php echo $value['produk'] ?></h4></a></td>
 			<td style="width:5%;"><?php echo "Rp " . number_format($value['harga'],0,',','.') ?> x <?php echo $value['qty'] ?></td>
 			<td style="width:5%;"><?php echo $value['beratbaru'] ?> kg</td>
 			<td style="width:5%;"><?php echo "Rp " . number_format($value['harga']*$value['qty'],0,',','.') ?></td>
-			<td style="width:5%;"></td>
 		</tr>
 		<?php $grandtotal += $value['harga']*$value['qty'];
 			$total_berat += $value['beratbaru']*$value['qty'];
 	}
-		echo '<tr><td></td><td></td>';
+		echo '</td><td></td>';
     	echo '<td>'.$data[0]['jasa_pengiriman'].'-'.$data[0]['tipe_pengiriman'].'</td>';
-    	echo '<td colspan="2">Rp. '.number_format($data[0]['harga_per_kg'],0,',','.').' x '.$total_berat.' kg</td>';
+    	echo '<td colspan="2">Rp. '.number_format($data[0]['harga_per_kg'],0,',','.').' x '.$total_berat.'('.ceil($total_berat).')kg</td>';
     	//echo '<td></td>';
     	echo '<td>Rp. '.number_format($data[0]['total_ongkir'],0,',','.').'</td>';
     	echo '</tr>';
-	echo "</table>Grand Total Rp. ".number_format($grandtotal+$total_berat,0,',','.')."</div><hr>";
-
-    	echo $data[0]['no_telp'].'<br>';
-    	echo $data[0]['alamat_lengkap'].'<br>';
-    	echo $data[0]['kota'].'<br>';
-    	echo $data[0]['provinsi'].'<br>';
-    	echo $data[0]['kode_pos'].'<br>';
+	echo "</table><hr><h4 class='pull-right'>Grand Total Rp. ".number_format($grandtotal+(ceil($total_berat)*$data[0]['harga_per_kg']),0,',','.')."</h4></div><div>&nbsp;</div>";
+		echo '<div class="container">Alamat pengiriman:<br>'.$data[0]['nama_penerima'].' ('.$data[0]['no_telp'].')<br>';
+    	echo $data[0]['alamat_lengkap'].' '.$data[0]['kota'].' '. $data[0]['provinsi'].' '.$data[0]['kode_pos'].'<br></div>';
 	}
 	echo '</body>';
-	//echo file_get_contents("cart.php");
-	//include "footer.php";
-
 ?>
 </div>
 </html>
 <?php
-
-    $output = ob_get_clean( );
-	//$output = ob_get_contents();
-    //echo $output;
-  	include "back/function.php";
-// 	echo send_email("adrianto.dennise@yahoo.com", "tes", $output, 0);
-	echo send_email("gredionprajena@gmail.com", "tes", $output, 0);
+	$output = ob_get_contents();
+	include "back/function.php";
+	$subject = "Segera lakukan pembayaran untuk transaksi ".$data[0]['kode_pemesanan']." sebesar Rp. ".number_format($data[0]['total_bayar'],0,',','.');
+	//echo send_email("adrianto.dennise@yahoo.com", $subject, $output, 0);
+	//echo send_email("gredionprajena@gmail.com", $subject, $output, 0);
+	echo send_email($data[0]['email'], $subject, $output, 0);
+	header('location: thankyou.php');
 ?>

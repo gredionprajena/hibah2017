@@ -150,7 +150,7 @@
 			$mail->Port = 587; 
 			$mail->From = $sender; 
 			$mail->FromName = "munafood"; 
-			$mail->addAddress($to , "Recepient Name"); 
+			$mail->addAddress($to , $to); 
 			$mail->isHTML(true); 
 			$mail->Subject = $subject;
 			$mail->Body =  create_body($message);
