@@ -490,7 +490,7 @@
             echo '<div class="col-xs-6 col-sm-3 col-md-4 col-lg-4" style="">'.$value['produk'].'</div>';
             echo "<div class='clearfix visible-xs-block'></div>";
             echo '<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="text-align:right;">Rp. ' . number_format($value['price'],0,',','.') .' x '. $value['qty'].'pcs</div>';
-            echo '<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="text-align:right;">@ '.$value['beratbaru']*$value['qty'].' kg</div>';
+            echo '<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="text-align:right;">@ '.$value['beratbaru'].' kg</div>';
             echo "<div class='clearfix visible-xs-block'></div>";
             echo '<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="text-align:right;">Rp. ' . number_format($value['total'],0,',','.') .'</div>';            
             echo '</div>';

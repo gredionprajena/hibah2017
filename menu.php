@@ -1,6 +1,6 @@
 <?php
+  session_start();
   include 'connect.php';
-  include 'session.php';  
   include 'back/function.php';
 
   date_default_timezone_set ("Asia/Jakarta");
@@ -67,6 +67,7 @@
           echo "<li><a class='linkmenu' href='product.php'>Produk</a></li>";           
           echo "<li><a class='linkmenu' href='profile.php'>Profil</a></li>";            
           if(isset($_SESSION['email'])){
+  include 'session.php';  
         ?>
             <li><a class='linkmenu hidden-sm' href='pesanan.php'>History Pesanan</a></li>
             <li class="dropdown">
