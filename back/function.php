@@ -114,6 +114,7 @@
 	    $bawah .= "<p style='font-size: 14px;'>";
 	    $bawah .= "<img style='width:10%;' src='http://munafood.com/image/wa.png'> 0812-1822-6469<br/></p>";	      
 	    $bawah .= "</td>";
+	    $bawah .= "<td style='width:35%;text-align:center;'></td>";  
 	    $bawah .= "</tr></table>";
 
 	    return $header . $atas . $message . $bawah;
