@@ -35,6 +35,7 @@
 
     if((isset($_POST["confKirim"]) && $_POST["confKirim"] != "") || (isset($_POST["confBayar"]) && $_POST["confBayar"] != "")){
       $flagForm = 1;
+      $success = "";
       if((isset($_POST["confKirim"]) && $_POST["confKirim"] != "") || (isset($_POST["saveTiket"]) && $_POST["saveTiket"] != "")){
         if (!isset($_POST["resi"]) || $_POST["resi"] == "") {
           $err = $resiErr = "Silakan isi resi yang diinginkan"; 

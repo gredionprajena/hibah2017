@@ -78,7 +78,7 @@
                 $date = date('YmdHis');
 
                 //ganti ini ketika ingin diubah ke hosting
-                $root = $_SERVER['DOCUMENT_ROOT']."/hibahibm";
+                $root = __DIR__;
                 $imgPath = "/image/01/bukti_transfer/";
                 $uploadpath =  $root . $imgPath;
                 // echo $uploadpath."<br>";

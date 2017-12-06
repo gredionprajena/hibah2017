@@ -5,17 +5,25 @@ class DB_Connect{
 	function __destruct(){}
 
 	public function system_env(){
-		//return "Production";
+		//return "Production munafood";
+		//return "Production dapurnanda";
 		return "Development";
 	}
 
 	public function connect(){
-		if($this->system_env() == "Production")
+		if($this->system_env() == "Production munafood")
 		{
 			$DB_SERVER = "localhost";
 			$DB_USER = "u177270944_root";
 			$DB_PASSWORD = "h1b4h1bm";
 			$DB_DATABASE = "u177270944_ukm";
+		}
+		else if($this->system_env() == "Production dapurnanda")
+		{
+			$DB_SERVER = "localhost";
+			$DB_USER = "u528535703_root";
+			$DB_PASSWORD = "h1b4h1bm";
+			$DB_DATABASE = "u528535703_ukm";
 		}
 		else
 		{
