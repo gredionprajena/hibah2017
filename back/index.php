@@ -3,7 +3,7 @@
   include 'menu.php'; 
   $urutanErr = $sejarahErr = $editSejarahErr = $noSejarahErr = $imageErr = $noMisiErr = $editMisiErr = $err = "";
   $editIsiSejarah = $editIsiMisi = "";
-  $editPemilikErr = $editNoRekErr = $editNamaBankErr = $noBankErr = "";
+  $editPemilikErr = $editNoRekErr = $editNamaBankErr = $editAlamatErr = $noBankErr = "";
   $editNamaBank = $editPemilik = $editNoRek = "";
   $flagForm = $imageLogo = 1;     
   $uploadImgOk = 0; 
@@ -52,6 +52,12 @@
     }
     if(isset($_POST["tambahMisi"]) && $_POST["tambahMisi"] == "tambahMisi"){ 
       $tambahMisi = $_POST["tambahMisi"] = "tambahMisi";   
+    }
+
+    if(isset($_POST["editItem"]) && $_POST["editItem"] != ""){ 
+      $tambahMisi = $_POST["tambahMisi"] = "cancel";
+      $tambahRekening = $_POST["tambahRekening"] = "cancel";
+      $tambahSejarah = $_POST["tambahSejarah"] = "cancel";
     }
 
     if((isset($_POST["addBank"]) && $_POST["addBank"] != "") || (isset($_POST["saveRek"]) && $_POST["saveRek"] != "") || (isset($_POST["confirmRek"]) && $_POST["confirmRek"] != "")) {  
@@ -624,7 +630,7 @@
           </div>
         </div>
           <?php
-            if(isset($_POST["tambahSejarah"])){                        
+            if(isset($_POST["tambahSejarah"]) && $_POST["tambahSejarah"] == "tambahSejarah"){        
               $sql1 = "SELECT urutan FROM sejarah order by urutan desc";
               $result1 = $con->query($sql1);
 
@@ -766,7 +772,7 @@
           </div>
         </div>        
           <?php
-            if(isset($_POST["tambahMisi"])){                        
+            if(isset($_POST["tambahMisi"]) && $_POST["tambahMisi"] == "tambahMisi"){      
               $sql1 = "SELECT urutan FROM misi order by urutan desc";
               $result1 = $con->query($sql1);
 

@@ -56,7 +56,7 @@
       <div id="navbarCollapse" class="collapse navbar-collapse" style="background-color: <?php echo $hdcolor; ?>;">
         <?php     
           echo "<ul class='nav navbar-nav'>";
-          echo "<li><a class='linkmenu hidden-xs' href='index.php' style='border-right:1px solid grey;margin-right:50px;'>CV Munafood</a></li>";    
+          echo "<li><a class='linkmenu hidden-xs' href='index.php' style='border-right:1px solid grey;margin-right:50px;'>$name</a></li>";    
           echo "<li><a class='linkmenu' href='addProduct.php'>Produk</a></li>";           
           echo "<li><a class='linkmenu' href='toko.php'>Toko</a></li>";            
           echo "<li><a class='linkmenu' href='konsinyasi.php'>Konsinyasi</a></li>";    

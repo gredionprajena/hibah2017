@@ -64,7 +64,7 @@
       <div id="navbarCollapse" class="collapse navbar-collapse" style="background-color: <?php echo $hdcolor; ?>;">
         <?php     
           echo "<ul class='nav navbar-nav'>";
-          echo "<li><a class='linkmenu hidden-xs' href='index.php' style='border-right:1px solid grey;margin-right:50px;'>CV Munafood</a></li>";    
+          echo "<li><a class='linkmenu hidden-xs' href='index.php' style='border-right:1px solid grey;margin-right:50px;'>$name</a></li>";    
           echo "<li><a class='linkmenu' href='product.php'>Produk</a></li>";           
           echo "<li><a class='linkmenu' href='profile.php'>Profil</a></li>";            
           if(isset($_SESSION['email'])){
