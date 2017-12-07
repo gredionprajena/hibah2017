@@ -73,7 +73,8 @@
                 $date = date('YmdHis');
 
                 //ganti ini ketika ingin diubah ke hosting
-                $root = $_SERVER['DOCUMENT_ROOT'] . "/Repo";
+                //$root = $_SERVER['DOCUMENT_ROOT'] . "/Repo";
+                $root = __DIR__;
                 $imgPath = "/image/01/produk/";
                 $uploadpath =  $root . $imgPath;
                 if(!file_exists($uploadpath)){mkdir ($uploadpath, 0777, true);}                            

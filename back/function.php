@@ -147,7 +147,7 @@
 			$mail->SMTPAuth = true;                          
 			$mail->Username = $sender; 
 			$mail->Password = $password; 
-			$mail->SMTPSecure = "tls"; 
+			//$mail->SMTPSecure = "tls"; 
 			$mail->Port = 587; 
 			$mail->From = $sender; 
 			$mail->FromName = "munafood"; 
