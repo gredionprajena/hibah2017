@@ -4,14 +4,27 @@
 <div class="container" style="background-color: white;width: 100%">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 20px;">
 	  <div class="row" style="vertical-align: middle;">      
-	    <div class="col-xs-offset-0 col-xs-5 col-sm-offset-1 col-sm-2 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2" style="margin-top: 40px;">
-	      <img class="img-responsive hidden-xs hidden-sm" style="height: 120px;margin:0 auto;margin-top:10px;" src="<?php echo $logo; ?>">
-	      <img class="img-responsive visible-sm" style="height: 100px;margin:0 auto;margin-top: 15px;" src="<?php echo $logo; ?>">
-	      <img class="img-responsive visible-xs" style="height: 120px;margin:0 auto;margin-top: 20px;" src="<?php echo $logo; ?>">
-	    </div>
-	    <div class="col-xs-7 col-sm-4 col-md-5 col-lg-5" style="margin-top: 40px;">
-	      <p style="font-size: 14px;"><br/><?php echo $name . " <br/>" . $alamat; ?></p>
-	    </div>
+	    <?php
+	  		if($logo == ""){
+	  	?>
+			    <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-6 col-md-offset-1 col-md-7 col-lg-offset-1 col-lg-7" style="margin-top: 35px;">
+			      <p style="font-size: 14px;margin-left: 30px;"><br/><?php echo $name . " <br/>" . $alamat; ?></p>
+			    </div>
+	  	<?php
+	  		}
+	  		else{
+	  	?>	  			
+			    <div class="col-xs-offset-0 col-xs-5 col-sm-offset-1 col-sm-2 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2" style="margin-top: 40px;">
+			      <img class="img-responsive hidden-xs hidden-sm" style="height: 120px;margin:0 auto;margin-top:10px;" src="<?php echo $logo; ?>">
+			      <img class="img-responsive visible-sm" style="height: 100px;margin:0 auto;margin-top: 15px;" src="<?php echo $logo; ?>">
+			      <img class="img-responsive visible-xs" style="height: 120px;margin:0 auto;margin-top: 20px;" src="<?php echo $logo; ?>">
+			    </div>	    
+			    <div class="col-xs-7 col-sm-4 col-md-5 col-lg-5" style="margin-top: 40px;">
+			      <p style="font-size: 14px;"><br/><?php echo $name . " <br/>" . $alamat; ?></p>
+			    </div>
+		<?php
+	  		}
+	  	?>
 	    <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3" style="margin-top: 50px;">    
 	<!--       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	        <p style="font-size: 14px;margin-top: 10px;">Media Sosial : </p>
