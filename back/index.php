@@ -1,9 +1,9 @@
 <html>
 <?php 
   include 'menu.php'; 
-  $urutanErr = $sejarahErr = $editSejarahErr = $noSejarahErr = $imageErr = $noMisiErr = $editMisiErr = $err = "";
-  $editIsiSejarah = $editIsiMisi = "";
-  $editPemilikErr = $editNoRekErr = $editNamaBankErr = $noBankErr = "";
+  $urutanErr = $sejarahErr = $editSejarahErr = $noSejarahErr = $imageErr = $noMisiErr = $editMisiErr = $editVisiErr = $err = "";
+  $editIsiSejarah = $editIsiMisi = $editIsiVisi = "";
+  $editPemilikErr = $editNoRekErr = $editNamaBankErr = $editAlamatErr = $noBankErr = "";
   $editNamaBank = $editPemilik = $editNoRek = "";
   $flagForm = $imageLogo = 1;     
   $uploadImgOk = 0; 
@@ -53,6 +53,51 @@
     if(isset($_POST["tambahMisi"]) && $_POST["tambahMisi"] == "tambahMisi"){ 
       $tambahMisi = $_POST["tambahMisi"] = "tambahMisi";   
     }
+
+    if(isset($_POST["editItem"]) && $_POST["editItem"] != ""){ 
+      $flagForm = 1;
+      $tambahMisi = $_POST["tambahMisi"] = "cancel";
+      $tambahRekening = $_POST["tambahRekening"] = "cancel";
+      $tambahSejarah = $_POST["tambahSejarah"] = "cancel";
+    }
+    if(isset($_POST["saveTiket"]) && $_POST["saveTiket"] != ""){ 
+      $flagForm = 1;
+      if (!isset($_POST["editAlamat"]) || $_POST["editAlamat"] == "") {
+        $err = $editAlamatErr = "Silakan tulis alamat yang diinginkan"; 
+        $flagForm = 0; 
+      } 
+      else { 
+        $editAlamat = addslashes($_POST["editAlamat"]); 
+      }
+
+      if($flagForm == 1){
+        $sql3 = "update ukm set alamat  = '$editAlamat' where id = '1'";
+        $result3 = $con->query($sql3);
+      }
+    }
+
+    if(isset($_POST["editVisi"]) && $_POST["editVisi"] != ""){ 
+      $flagForm = 1;
+      $tambahMisi = $_POST["tambahMisi"] = "cancel";
+      $tambahRekening = $_POST["tambahRekening"] = "cancel";
+      $tambahSejarah = $_POST["tambahSejarah"] = "cancel";
+    }
+    if(isset($_POST["saveVisi"]) && $_POST["saveVisi"] != ""){ 
+      $flagForm = 1;
+      if (!isset($_POST["editIsiVisi"]) || $_POST["editIsiVisi"] == "") {
+        $err = $editVisiErr = "Silakan tulis visi yang diinginkan"; 
+        $flagForm = 0; 
+      } 
+      else { 
+        $editIsiVisi = addslashes($_POST["editIsiVisi"]); 
+      }
+
+      if($flagForm == 1){
+        $sql3 = "update ukm set visi = '$editIsiVisi' where id = '1'";
+        $result3 = $con->query($sql3);        
+      }
+    }
+
 
     if((isset($_POST["addBank"]) && $_POST["addBank"] != "") || (isset($_POST["saveRek"]) && $_POST["saveRek"] != "") || (isset($_POST["confirmRek"]) && $_POST["confirmRek"] != "")) {  
       $flagForm = 1;
@@ -380,7 +425,7 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-4 col-lg-3' for='Alamat'>Alamat : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<textarea class='form-control' rows='5' id='editSejarah' name='editSejarah' value='" . $row['alamat'] . "' placeholder='add Alamat...'>" . $row['alamat'] . "</textarea>";   
+                      echo "<textarea class='form-control' rows='5' id='editAlamat' name='editAlamat' value='" . $row['alamat'] . "' placeholder='Alamat...'>" . $row['alamat'] . "</textarea>";   
                       echo "<span class='text-danger'>$editAlamatErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";
@@ -393,12 +438,7 @@
                     echo "<div class='panel-footer clearfix'>";
                         echo "<div class='pull-right'>";                    
                             echo "<button type='submit' class='btn btn-default' name='CancelTiket' value='profile'>Cancel</button>&emsp;";
-                            if((isset($_POST["hapus"]) && $kode == $row['id'])){ 
-                              echo "<button type='submit' class='btn btn-primary' name='confirm' value='profile'>Konfirmasi</button>&emsp;";
-                            }
-                            else{
-                              echo "<button type='submit' class='btn btn-primary' name='saveTiket' value='profile'>Konfirmasi</button>&emsp;";
-                            }
+                            echo "<button type='submit' class='btn btn-primary' name='saveTiket' value='profile'>Konfirmasi</button>&emsp;";
                         echo "</div>";
                     echo "</div>";
                   echo "</div>";     
@@ -516,27 +556,27 @@
 
             if ($result->num_rows > 0) {            
               $i=0;
-              while($row = $result->fetch_assoc()) {
+              while($row2 = $result->fetch_assoc()) {
                 echo "<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'>";
-                echo "<p style='margin-left: 30px;'>" . $row['urutan'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row2['urutan'] . "</p>";    
                 echo "</div>";
                 echo "<div class='hidden-xs col-sm-3 col-md-3 col-lg-3'>";
-                echo "<p style='margin-left: 30px;'>" . $row['nama_bank'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row2['nama_bank'] . "</p>";    
                 echo "</div>";
                 echo "<div class='hidden-xs col-sm-3 col-md-3 col-lg-3'>";
-                echo "<p style='margin-left: 30px;'>" . $row['no_rek'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row2['no_rek'] . "</p>";    
                 echo "</div>";
                 echo "<div class='hidden-xs col-sm-3 col-md-3 col-lg-3'>";
-                echo "<p style='margin-left: 30px;'>" . $row['pemilik_rek'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row2['pemilik_rek'] . "</p>";    
                 echo "</div>";
                 echo "<div class='col-xs-12 col-sm-3 col-md-2 col-lg-2'>";                
-                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusBank' value='" . $row['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
-                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editBank' value='" . $row['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusBank' value='" . $row2['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editBank' value='" . $row2['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
                 echo "</div>";                
                 echo "<div class='visible-xs col-xs-12'>";
                 echo "<hr/>";
                 echo "</div>";
-                if((isset($_POST["editBank"]) && $kodeRek == $row['id']) || (isset($_POST["hapusBank"]) && $kodeRek == $row['id'])){
+                if((isset($_POST["editBank"]) && $kodeRek == $row2['id']) || (isset($_POST["hapusBank"]) && $kodeRek == $row2['id'])){
                   if(isset($_POST["editBank"])){
                     echo "<div class='panel panel-info col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
                     echo "<div class='panel-heading'>Konfirmasi Edit</div>";
@@ -549,7 +589,7 @@
                       echo "<div class='form-group'>";
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='noFaq'>Urutan : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row['urutan'] . "' placeholder='" . $row['urutan'] . "'>";
+                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row2['urutan'] . "' placeholder='" . $row2['urutan'] . "'>";
                       echo "<span class='text-danger'>$noBankErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
@@ -557,7 +597,7 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Sejarah'>Nama Bank : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";                      
-                      echo "<input type='text' class='form-control' id='editNamaBank' name='editNamaBank' value='" . $row['nama_bank'] . "' placeholder='" . $row['nama_bank'] . "'>"; 
+                      echo "<input type='text' class='form-control' id='editNamaBank' name='editNamaBank' value='" . $row2['nama_bank'] . "' placeholder='" . $row2['nama_bank'] . "'>"; 
                       echo "<span class='text-danger'>$editNamaBankErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";    
@@ -565,7 +605,7 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='pemilik'>No Rekening : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";                      
-                      echo "<input type='text' class='form-control' id='editNoRek' name='editNoRek' value='" . $row['no_rek'] . "' placeholder='" . $row['no_rek'] . "'>"; 
+                      echo "<input type='text' class='form-control' id='editNoRek' name='editNoRek' value='" . $row2['no_rek'] . "' placeholder='" . $row2['no_rek'] . "'>"; 
                       echo "<span class='text-danger'>$editNoRekErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
@@ -573,19 +613,19 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Sejarah'>Atas Nama : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";                      
-                      echo "<input type='text' class='form-control' id='editPemilik' name='editPemilik' value='" . $row['pemilik_rek'] . "' placeholder='" . $row['pemilik_rek'] . "'>"; 
+                      echo "<input type='text' class='form-control' id='editPemilik' name='editPemilik' value='" . $row2['pemilik_rek'] . "' placeholder='" . $row2['pemilik_rek'] . "'>"; 
                       echo "<span class='text-danger'>$editPemilikErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";       
                       echo "</div>";        
                       echo "<div class='panel-footer clearfix'>";
                         echo "<div class='pull-right'>";                    
-                          echo "<button type='submit' class='btn btn-default' name='cancelRek' value='" . $row['id'] . "'>Cancel</button>&emsp;";
-                          if((isset($_POST["hapusBank"]) && $kodeRek == $row['id'])){ 
-                            echo "<button type='submit' class='btn btn-primary' name='confirmRek' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                          echo "<button type='submit' class='btn btn-default' name='cancelRek' value='" . $row2['id'] . "'>Cancel</button>&emsp;";
+                          if((isset($_POST["hapusBank"]) && $kodeRek == $row2['id'])){ 
+                            echo "<button type='submit' class='btn btn-primary' name='confirmRek' value='" . $row2['id'] . "'>Konfirmasi</button>&emsp;";
                           }
                           else{
-                            echo "<button type='submit' class='btn btn-primary' name='saveRek' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                            echo "<button type='submit' class='btn btn-primary' name='saveRek' value='" . $row2['id'] . "'>Konfirmasi</button>&emsp;";
                           }
                         echo "</div>";
                     echo "</div>";
@@ -624,13 +664,13 @@
           </div>
         </div>
           <?php
-            if(isset($_POST["tambahSejarah"])){                        
+            if(isset($_POST["tambahSejarah"]) && $_POST["tambahSejarah"] == "tambahSejarah"){        
               $sql1 = "SELECT urutan FROM sejarah order by urutan desc";
               $result1 = $con->query($sql1);
 
               if ($result1->num_rows > 0) {   
-                $row1 = $result1->fetch_assoc();
-                $urutan = $row1['urutan'] + 1;
+                $row3 = $result1->fetch_assoc();
+                $urutan = $row3['urutan'] + 1;
               }
               echo "<div class='panel panel-success col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
               echo "<div class='panel-heading'>Konfirmasi Add</div>";          
@@ -681,21 +721,21 @@
 
             if ($result->num_rows > 0) {            
               $i=0;
-              while($row = $result->fetch_assoc()) {
+              while($row4 = $result->fetch_assoc()) {
                 echo "<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'>";
-                echo "<p style='margin-left: 30px;'>" . $row['urutan'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row4['urutan'] . "</p>";    
                 echo "</div>";
                 echo "<div class='col-xs-9 col-sm-8 col-md-9 col-lg-9'>";
-                echo "<p style='margin-left: 30px;'>" . $row['sejarah'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row4['sejarah'] . "</p>";    
                 echo "</div>";
                 echo "<div class='col-xs-12 col-sm-3 col-md-2 col-lg-2'>";                
-                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusSejarah' value='" . $row['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
-                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editSejarah' value='" . $row['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusSejarah' value='" . $row4['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editSejarah' value='" . $row4['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
                 echo "</div>";                
                 echo "<div class='visible-xs col-xs-12'>";
                 echo "<hr/>";
                 echo "</div>";
-                if((isset($_POST["editSejarah"]) && $kodeSejarah == $row['id']) || (isset($_POST["hapusSejarah"]) && $kodeSejarah == $row['id'])){
+                if((isset($_POST["editSejarah"]) && $kodeSejarah == $row4['id']) || (isset($_POST["hapusSejarah"]) && $kodeSejarah == $row4['id'])){
                   if(isset($_POST["editSejarah"])){
                     echo "<div class='panel panel-info col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
                     echo "<div class='panel-heading'>Konfirmasi Edit</div>";
@@ -708,7 +748,7 @@
                       echo "<div class='form-group'>";
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='noFaq'>Urutan : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row['urutan'] . "' placeholder='" . $row['urutan'] . "'>";
+                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row4['urutan'] . "' placeholder='" . $row4['urutan'] . "'>";
                       echo "<span class='text-danger'>$noSejarahErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
@@ -716,19 +756,19 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Sejarah'>Sejarah : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<textarea class='form-control' rows='5' id='editIsiSejarah' name='editIsiSejarah' value='" . $row['sejarah'] . "' placeholder='add Sejarah...'>" . $row['sejarah'] . "</textarea>";   
+                      echo "<textarea class='form-control' rows='5' id='editIsiSejarah' name='editIsiSejarah' value='" . $row4['sejarah'] . "' placeholder='add Sejarah...'>" . $row4['sejarah'] . "</textarea>";   
                       echo "<span class='text-danger'>$editSejarahErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
                       echo "</div>";        
                     echo "<div class='panel-footer clearfix'>";
                         echo "<div class='pull-right'>";                    
-                            echo "<button type='submit' class='btn btn-default' name='cancelSejarah' value='" . $row['id'] . "'>Cancel</button>&emsp;";
-                            if((isset($_POST["hapusSejarah"]) && $kodeSejarah == $row['id'])){ 
-                              echo "<button type='submit' class='btn btn-primary' name='confirmSejarah' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                            echo "<button type='submit' class='btn btn-default' name='cancelSejarah' value='" . $row4['id'] . "'>Cancel</button>&emsp;";
+                            if((isset($_POST["hapusSejarah"]) && $kodeSejarah == $row4['id'])){ 
+                              echo "<button type='submit' class='btn btn-primary' name='confirmSejarah' value='" . $row4['id'] . "'>Konfirmasi</button>&emsp;";
                             }
                             else{
-                              echo "<button type='submit' class='btn btn-primary' name='saveSejarah' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                              echo "<button type='submit' class='btn btn-primary' name='saveSejarah' value='" . $row4['id'] . "'>Konfirmasi</button>&emsp;";
                             }
                         echo "</div>";
                     echo "</div>";
@@ -766,13 +806,13 @@
           </div>
         </div>        
           <?php
-            if(isset($_POST["tambahMisi"])){                        
+            if(isset($_POST["tambahMisi"]) && $_POST["tambahMisi"] == "tambahMisi"){      
               $sql1 = "SELECT urutan FROM misi order by urutan desc";
               $result1 = $con->query($sql1);
 
               if ($result1->num_rows > 0) {   
-                $row1 = $result1->fetch_assoc();
-                $urutan = $row1['urutan'] + 1;
+                $row5 = $result1->fetch_assoc();
+                $urutan = $row5['urutan'] + 1;
               }
               echo "<div class='panel panel-success col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
               echo "<div class='panel-heading'>Konfirmasi Add</div>";          
@@ -807,12 +847,12 @@
           <br/>          
           <?php 
             echo "<div class='col-xs-10 col-sm-10 col-md-10 col-lg-10'>";
-            echo "<p style=''><strong>Visi : </strong>&emsp;" . $visi . "</p>";    
+            echo "<p style=''><strong>Visi : </strong>&emsp;" . $row['visi'] . "</p>";    
             echo "</div>";
             echo "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2'>";                            
             echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editVisi' value='$visi'><span class='glyphicon glyphicon-edit'></span></button>";
             echo "</div>";
-            if(isset($_POST["editVisi"]) || isset($_POST["hapus"])){                       
+            if(isset($_POST["editVisi"])){                       
               if(isset($_POST["editVisi"])){
                 echo "<div class='panel panel-info col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
                 echo "<div class='panel-heading'>Konfirmasi Edit</div>";
@@ -825,20 +865,15 @@
                   echo "<div class='form-group'>";        
                   echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Visi'>Visi : </label>";
                   echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                  echo "<textarea class='form-control' rows='5' id='editIsiVisi' name='editIsiVisi' value='" . $row['visi'] . "' placeholder='add Visi...'>" . $row['visi'] . "</textarea>";   
-                  echo "<span class='text-danger'>$editMisiErr</span>";
+                  echo "<textarea class='form-control' rows='5' id='editIsiVisi' name='editIsiVisi' value='" . $row['visi'] . "' placeholder='Visi...'>" . $row['visi'] . "</textarea>";   
+                  echo "<span class='text-danger'>$editVisiErr</span>";
                   echo "</div>";
                   echo "<div class='clearfix visible-xs-block'></div>";                 
                   echo "</div>";        
                 echo "<div class='panel-footer clearfix'>";
                     echo "<div class='pull-right'>";                    
-                        echo "<button type='submit' class='btn btn-default' name='CancelTiket' value='visi'>Cancel</button>&emsp;";
-                        if(isset($_POST["hapus"])){ 
-                          echo "<button type='submit' class='btn btn-primary' name='confirm' value='visi'>Konfirmasi</button>&emsp;";
-                        }
-                        else{
-                          echo "<button type='submit' class='btn btn-primary' name='saveTiket' value='visi'>Konfirmasi</button>&emsp;";
-                        }
+                        echo "<button type='submit' class='btn btn-default' name='CancelVisi' value='visi'>Cancel</button>&emsp;";
+                        echo "<button type='submit' class='btn btn-primary' name='saveVisi' value='visi'>Konfirmasi</button>&emsp;";
                     echo "</div>";
                 echo "</div>";
               echo "</div>";     
@@ -870,21 +905,21 @@
 
             if ($result->num_rows > 0) {            
               $i=0;
-              while($row = $result->fetch_assoc()) {
+              while($row6 = $result->fetch_assoc()) {
                 echo "<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'>";
-                echo "<p style='margin-left: 30px;'>" . $row['urutan'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row6['urutan'] . "</p>";    
                 echo "</div>";
                 echo "<div class='col-xs-9 col-sm-8 col-md-9 col-lg-9'>";
-                echo "<p style='margin-left: 30px;'>" . $row['misi'] . "</p>";    
+                echo "<p style='margin-left: 30px;'>" . $row6['misi'] . "</p>";    
                 echo "</div>";
                 echo "<div class='col-xs-12 col-sm-3 col-md-2 col-lg-2'>";                
-                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusMisi' value='" . $row['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
-                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editMisi' value='" . $row['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-danger pull-right' name='hapusMisi' value='" . $row6['id'] . "'><span class='glyphicon glyphicon-trash'></span></button>";
+                echo "<button type='submit' class='btn btn-sm btn-info pull-right' style='margin-right:20px;' name='editMisi' value='" . $row6['id'] . "'><span class='glyphicon glyphicon-edit'></span></button>";
                 echo "</div>";                
                 echo "<div class='visible-xs col-xs-12'>";
                 echo "<hr/>";
                 echo "</div>";
-                if((isset($_POST["editMisi"]) && $kodeMisi == $row['id']) || (isset($_POST["hapusMisi"]) && $kodeMisi == $row['id'])){                       
+                if((isset($_POST["editMisi"]) && $kodeMisi == $row6['id']) || (isset($_POST["hapusMisi"]) && $kodeMisi == $row6['id'])){                       
                   if(isset($_POST["editMisi"])){
                     echo "<div class='panel panel-info col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8 col-lg-offset-2 col-lg-8' >";
                     echo "<div class='panel-heading'>Konfirmasi Edit</div>";
@@ -897,7 +932,7 @@
                       echo "<div class='form-group'>";
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='noFaq'>Urutan : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row['urutan'] . "' placeholder='" . $row['urutan'] . "'>";
+                      echo "<input type='text' class='form-control' id='urutan' name='urutan' value='" . $row6['urutan'] . "' placeholder='" . $row6['urutan'] . "'>";
                       echo "<span class='text-danger'>$noMisiErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
@@ -905,19 +940,19 @@
                       echo "<div class='form-group'>";        
                       echo "<label style='font-size:12px;' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' for='Misi'>Misi : </label>";
                       echo "<div class='col-xs-12 col-sm-8 col-md-8 col-lg-8'>";
-                      echo "<textarea class='form-control' rows='5' id='editIsiMisi' name='editIsiMisi' value='" . $row['misi'] . "' placeholder='add Misi...'>" . $row['misi'] . "</textarea>";   
+                      echo "<textarea class='form-control' rows='5' id='editIsiMisi' name='editIsiMisi' value='" . $row6['misi'] . "' placeholder='add Misi...'>" . $row6['misi'] . "</textarea>";   
                       echo "<span class='text-danger'>$editMisiErr</span>";
                       echo "</div>";
                       echo "<div class='clearfix visible-xs-block'></div>";                 
                       echo "</div>";        
                     echo "<div class='panel-footer clearfix'>";
                         echo "<div class='pull-right'>";                    
-                            echo "<button type='submit' class='btn btn-default' name='cancelMisi' value='" . $row['id'] . "'>Cancel</button>&emsp;";
-                            if((isset($_POST["hapusMisi"]) && $kodeMisi == $row['id'])){ 
-                              echo "<button type='submit' class='btn btn-primary' name='confirmMisi' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                            echo "<button type='submit' class='btn btn-default' name='cancelMisi' value='" . $row6['id'] . "'>Cancel</button>&emsp;";
+                            if((isset($_POST["hapusMisi"]) && $kodeMisi == $row6['id'])){ 
+                              echo "<button type='submit' class='btn btn-primary' name='confirmMisi' value='" . $row6['id'] . "'>Konfirmasi</button>&emsp;";
                             }
                             else{
-                              echo "<button type='submit' class='btn btn-primary' name='saveMisi' value='" . $row['id'] . "'>Konfirmasi</button>&emsp;";
+                              echo "<button type='submit' class='btn btn-primary' name='saveMisi' value='" . $row6['id'] . "'>Konfirmasi</button>&emsp;";
                             }
                         echo "</div>";
                     echo "</div>";
