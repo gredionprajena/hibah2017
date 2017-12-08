@@ -159,7 +159,10 @@
 			//$mail->SMTPSecure = "tls"; 
 			$mail->Port = 587; 
 			$mail->From = $sender; 
-			$mail->FromName = "munafood"; 
+			if($env->system_env() == "Production munafood" || $env->system_env() == "Development munafood")
+				$mail->FromName = "munafood"; 
+			else if($env->system_env() == "Production dapurnanda" || $env->system_env() == "Development dapurnanda") 
+				$mail->FromName = "dapurnanda"; 
 			$mail->addAddress($to , $to); 
 			$mail->isHTML(true); 
 			$mail->Subject = $subject;
