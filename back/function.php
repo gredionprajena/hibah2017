@@ -133,7 +133,7 @@
 			if($from == 0) $sender = 'no-reply@dapurnanda.com';
 			else if($from == 1) $sender = 'admin@dapurnanda.com';
 
-			$password = "d4purn4nda";
+			$password = "d4purn4nd4";
 		}
 
 		// if($env->system_env() == "Production")
