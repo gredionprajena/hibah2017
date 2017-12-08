@@ -69,22 +69,22 @@
               $allowedExts = array("gif", "jpeg", "jpg", "png");
               $temp = explode(".", $_FILES["imageProduct"]["name"]);
               $extension = end($temp);
-              if ((($_FILES["imageProduct"]["type"] == "image/gif") || ($_FILES["imageProduct"]["type"] == "image/jpeg") || ($_FILES["imageProduct"]["type"] == "image/jpg") || ($_FILES["imageProduct"]["type"] == "image/pjpeg") || ($_FILES["imageProduct"]["type"] == "image/x-png") || ($_FILES["imageProduct"]["type"] == "image/png")) && in_array($extension, $allowedExts)){
+              if (((strtolower($_FILES["imageProduct"]["type"]) == "image/gif") || (strtolower($_FILES["imageProduct"]["type"]) == "image/jpeg") || (strtolower($_FILES["imageProduct"]["type"]) == "image/jpg") || (strtolower($_FILES["imageProduct"]["type"]) == "image/pjpeg") || (strtolower($_FILES["imageProduct"]["type"]) == "image/x-png") || (strtolower($_FILES["imageProduct"]["type"]) == "image/png")) && in_array($extension, $allowedExts)){
                 $date = date('YmdHis');
 
                 //ganti ini ketika ingin diubah ke hosting
                 //$root = $_SERVER['DOCUMENT_ROOT'] . "/Repo";
                 $root = __DIR__;
-                $imgPath = "/image/01/produk/";
-                $uploadpath =  $root . $imgPath;
+                $imgPath = "image/01/produk/";
+                $uploadpath =  $root .'../'. $imgPath;
                 if(!file_exists($uploadpath)){mkdir ($uploadpath, 0777, true);}                            
                 $filenameImg = $imgPath . "produk" . uniqid() . "." . $extension;
-                $fullfilename = $root . $filenameImg;
+                $fullfilename = $root . '../'.$filenameImg;
                 $image = $_FILES["imageProduct"]["tmp_name"];               
                 if(GenerateThumbnail($image, $fullfilename, 600, 800, 0.80) == 0){$uploadImgOk = 1;}
                 else{$uploadImgOk = $flagForm=0;}                
               }
-              else{$uploadImgOk = $flagForm=0;}                
+              else{$uploadImgOk = $flagForm=0;$err='nama file salah'.$_FILES["imageProduct"]["type"];}                
             }
             else{$uploadImgOk = $flagForm=0;}
           }

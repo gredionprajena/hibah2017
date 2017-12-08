@@ -7,7 +7,8 @@ class DB_Connect{
 	public function system_env(){
 		//return "Production munafood";
 		//return "Production dapurnanda";
-		return "Development";
+		return "Development munafood";
+		//return "Development dapurnanda";
 	}
 
 	public function connect(){
@@ -25,7 +26,14 @@ class DB_Connect{
 			$DB_PASSWORD = "h1b4h1bm";
 			$DB_DATABASE = "u528535703_ukm";
 		}
-		else
+		else if($this->system_env() == "Development munafood")
+		{
+			$DB_SERVER = "localhost";
+			$DB_USER = "root";
+			$DB_PASSWORD = "";
+			$DB_DATABASE = "ukm";
+		}
+		else if($this->system_env() == "Development dapurnanda")
 		{
 			$DB_SERVER = "localhost";
 			$DB_USER = "root";

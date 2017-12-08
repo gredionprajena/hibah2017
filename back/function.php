@@ -123,9 +123,18 @@
 	function send_email($to, $subject, $message, $from){
 		$env = new DB_Connect();
 
-		if($from == 0){$sender = 'no-reply@munafood.com';}
-		else if($from == 1){$sender = 'admin@munafood.com';}
-		$password = "mun4f00d";
+		if(system_env() == "Production munafood" || system_env() == "Development munafood") {
+			if($from == 0) $sender = 'no-reply@munafood.com';
+			else if($from == 1) $sender = 'admin@munafood.com';
+
+			$password = "mun4f00d";
+		}
+		else if(system_env() == "Production dapurnanda" || system_env() == "Development dapurnanda") {
+			if($from == 0) $sender = 'no-reply@dapurnanda.com';
+			else if($from == 1) $sender = 'admin@dapurnanda.com';
+
+			$password = "d4purn4nda";
+		}
 
 		// if($env->system_env() == "Production")
 		// {
