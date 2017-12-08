@@ -5,10 +5,13 @@ class DB_Connect{
 	function __destruct(){}
 
 	public function system_env(){
-		//return "Production munafood";
-		//return "Production dapurnanda";
-		return "Development munafood";
-		//return "Development dapurnanda";
+		if($_SERVER['SERVER_NAME'] == "www.munafood.com" || $_SERVER['SERVER_NAME'] == "munafood.com")
+			return "Production munafood";
+		else if($_SERVER['SERVER_NAME'] == "www.dapurnanda.com" || $_SERVER['SERVER_NAME'] == "dapurnanda.com")
+			return "Production dapurnanda";
+		else if($_SERVER['SERVER_NAME'] == "localhost")
+			return "Development munafood";
+			//return "Development dapurnanda";
 	}
 
 	public function connect(){
